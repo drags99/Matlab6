@@ -1,7 +1,7 @@
 %solves 2d poisson equation 
 
 %defining paramaters
-iterate=100;
+iterate=1000;
 Lx=pi;
 Ly=pi;
 u0=0;
@@ -16,7 +16,7 @@ dely=Ly/(N+1);
 x=delx:delx:Lx-delx;
 y=dely:dely:Ly-dely;
 
-f=zeros(N,N);%preallocate f(x,y)
+f=zeros(N+2,N+2);%preallocate f(x,y)
 
 for i=1:N
     for j=1:N
@@ -25,15 +25,22 @@ for i=1:N
 end
 
 % initial values of matrix u
-u=zeros(N+2,N+2);
-u(1,:)=u0;
-u(N+2,:)=uL;
-u(:,1)=v0;
-u(:,N+2)=vL;
+u=zeros(N,N);
 
 %Gauss Siedel
 for z=1:iterate
-    for i=2:N+1
-        for j=2:N+1
-            u(i,j)=(1/4)*(u(i-1,j)+u(i+1,j)+u(i,j-1)+u(i,j+1))-
+    for i=1:N
+        for j=1:N
+            u(i,j)=(1/4)*(u(i-1,j)+u(i+1,j)+u(i,j-1)+u(i,j+1))-((delx^2)/4)*f(i,j);
+        end
+    end
 end
+
+%exact solution for comparison
+exactu=zeros(N,N);
+for i=1:N
+    for j=1:N
+        exactu(i,j)=(Lx-y(j))*sin(M*x(i))*sinh(M*y(j));
+    end
+end
+
