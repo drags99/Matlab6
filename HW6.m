@@ -67,13 +67,43 @@ end
 L1=L1/(numpoints)
 
 %graphs
-for z=1:((N+2)*(N+2))
-    for i=2:N+1
-        for j=2:N+1
-            vectoraproxu(z)=u(i,j);
-            vectorexactu(z)=exactu(i,j);
-        end
+pointnumber=1;
+
+%convert matrix into vector form to plot
+for i=2:N+1
+    for j=2:N+1
+    vectoraproxu(pointnumber)=u(i,j);
+    vectorexactu(pointnumber)=exactu(i,j);
+    vectorx(pointnumber)=i*delx;
+    vectory(pointnumber)=j*dely;
+    pointnumber=pointnumber+1;
     end
 end
 
+%3d plot
+plot3(vectorx,vectory,vectorexactu,vectorx,vectory,vectoraproxu)
+legend('exact u','aproximate u')
+
+%2d plot of u for a fixed x=1.5863
+vectory2=vectory(4901:5000);
+vectorexactu2=vectorexactu(4901:5000);
+vectoraproxu2=vectoraproxu(4901:5000);
+figure()
+plot(vectory2,vectorexactu2,vectory2,vectoraproxu2,'o')
+legend('exact u','aproximate u')
+title('for x=1.5863')
+
+%2d plot of u for a fixed y=1.586348765674054
+pointnumber3=0;
+for i=50:100:size(vectory,2)
+    pointnumber3=pointnumber3+1;
+    vectory3(pointnumber3)=vectory(i);
+    vectorx3(pointnumber3)=vectorx(i);
+    vectorexactu3(pointnumber3)=vectorexactu(i);
+    vectoraproxu3(pointnumber3)=vectoraproxu(i);
+end
+figure()
+plot(vectorx3,vectorexactu3,vectorx3,vectoraproxu3,'o')
+legend('exact u','aproximate u')
+title('for y=1.5863')
 
